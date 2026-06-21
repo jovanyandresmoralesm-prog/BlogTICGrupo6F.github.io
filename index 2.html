@@ -1,0 +1,776 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Nueva Era de la Inteligencia Artificial</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #090d16;
+            --secondary: #2563eb;
+            --accent: #06b6d4;
+            --accent-glow: rgba(6, 182, 212, 0.4);
+            --bg: #030712;
+            --card-bg: rgba(15, 23, 42, 0.65);
+            --text: #94a3b8;
+            --text-light: #f8fafc;
+            --text-dark: #0f172a;
+            --border: rgba(6, 182, 212, 0.2);
+            --shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.8);
+            --gradient: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
+            --neon-glow: 0 0 25px rgba(6, 182, 212, 0.5);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+            line-height: 1.6;
+            background-color: var(--bg);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(6, 182, 212, 0.15) 0px, transparent 50%);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        /* PANTALLA DE INICIO (SPLASH SCREEN) */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #020617;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+
+        .splash-content {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .splash-logo {
+            font-size: 5.5rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: pulseGlow 2s infinite ease-in-out;
+            margin-bottom: 1.5rem;
+        }
+
+        .splash-title {
+            color: var(--text-light);
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.03em;
+        }
+
+        .ai-badge-splash {
+            background: rgba(6, 182, 212, 0.1);
+            border: 1px solid var(--accent);
+            color: var(--text-light);
+            padding: 0.6rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            box-shadow: var(--neon-glow);
+            margin-bottom: 3rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .loader-bar {
+            width: 260px;
+            height: 4px;
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 10px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loader-progress {
+            width: 0%;
+            height: 100%;
+            background: var(--gradient);
+            position: absolute;
+            animation: loadProgress 2.2s forwards cubic-bezier(0.1, 0.85, 0.45, 1);
+        }
+
+        @keyframes loadProgress { 100% { width: 100%; } }
+        @keyframes pulseGlow {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(6, 182, 212, 0.4)); }
+            50% { transform: scale(1.05); filter: drop-shadow(0 0 30px rgba(6, 182, 212, 0.8)); }
+        }
+
+        /* CONTENIDO PRINCIPAL */
+        #app-content {
+            opacity: 0;
+            transition: opacity 0.8s ease;
+        }
+
+        header {
+            background: linear-gradient(to bottom, rgba(3, 7, 18, 0.4), var(--bg)), 
+                        url('https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            padding: 5rem 2rem 3rem 2rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(6, 182, 212, 0.15);
+        }
+
+        .ai-built-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(90deg, rgba(37, 99, 235, 0.3) 0%, rgba(6, 182, 212, 0.3) 100%);
+            border: 1px solid var(--accent);
+            color: var(--text-light);
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--neon-glow);
+        }
+
+        header h1 {
+            font-size: 3.8rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #ffffff, #22d3ee, #3b82f6, #ffffff);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 4s linear infinite;
+        }
+
+        @keyframes shine { to { background-position: 200% center; } }
+
+        .visitor-counter {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            background: rgba(15, 23, 42, 0.85);
+            padding: 0.6rem 1.4rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            color: var(--accent);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+        }
+
+        /* NAVEGACIÓN POR PESTAÑAS */
+        nav {
+            background-color: rgba(9, 13, 22, 0.9);
+            backdrop-filter: blur(20px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 0.75rem;
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            border-bottom: 1px solid rgba(6, 182, 212, 0.25);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            color: #94a3b8;
+            padding: 0.7rem 1.3rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-light);
+            background: rgba(6, 182, 212, 0.08);
+        }
+
+        .tab-btn.active {
+            color: var(--text-light);
+            background: rgba(6, 182, 212, 0.15);
+            border-color: var(--accent);
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
+        }
+
+        /* CONTENEDORES DE CONTENIDO */
+        main {
+            max-width: 1100px;
+            margin: 3rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeInTab 0.5s ease forwards;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeInTab {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        section {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            padding: 3.5rem;
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            margin-bottom: 2rem;
+        }
+
+        h2 {
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            font-size: 2.2rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        h3 {
+            color: var(--text-light);
+            margin: 2rem 0 1rem 0;
+            font-size: 1.5rem;
+            font-weight: 700;
+            border-left: 4px solid var(--accent);
+            padding-left: 10px;
+        }
+
+        h2 i {
+            color: var(--accent);
+            text-shadow: 0 0 10px var(--accent);
+        }
+
+        /* DISEÑO DE TARJETAS (PILARES) */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: rgba(19, 29, 49, 0.5);
+            border-radius: 20px;
+            border: 1px solid rgba(34, 49, 77, 0.7);
+            overflow: hidden;
+            transition: all 0.35s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card-img-wrapper {
+            height: 180px;
+            overflow: hidden;
+        }
+
+        .card-img {
+            width: 100%; height: 100%; object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            border-color: var(--accent);
+            box-shadow: var(--neon-glow);
+            background: rgba(19, 29, 49, 0.8);
+        }
+
+        .card:hover .card-img { transform: scale(1.1); }
+
+        .card-content { padding: 1.8rem; flex-grow: 1; }
+
+        .card h4 {
+            color: var(--text-light);
+            margin-bottom: 0.6rem;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card p {
+            font-size: 0.95rem;
+            color: var(--text);
+        }
+
+        /* VIDEOS */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .video-card {
+            background: rgba(10, 15, 30, 0.9);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+        }
+
+        .video-card:hover {
+            border-color: var(--accent);
+            box-shadow: var(--neon-glow);
+        }
+
+        .video-container {
+            position: relative; padding-bottom: 56.25%; height: 0; background: #000;
+        }
+
+        .video-container iframe {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;
+        }
+
+        .video-info { padding: 1.8rem; }
+        .video-info h4 { color: var(--text-light); margin-bottom: 0.5rem; font-size: 1.25rem;}
+        .video-info p { margin-bottom: 1.5rem; font-size: 0.95rem; }
+
+        .btn-video-link {
+            display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+            background: rgba(6, 182, 212, 0.1); border: 1px solid var(--accent); color: var(--accent);
+            padding: 0.75rem; border-radius: 12px; text-decoration: none; font-weight: 600;
+            width: 100%; transition: all 0.3s ease;
+        }
+
+        .btn-video-link:hover {
+            background: var(--gradient); color: var(--text-dark); box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
+        }
+
+        /* GALERÍA */
+        .gallery-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
+        }
+
+        .gallery-item {
+            position: relative; border-radius: 16px; overflow: hidden; height: 260px; border: 1px solid var(--border);
+        }
+
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: all 0.5s ease; }
+        .gallery-overlay {
+            position: absolute; bottom: 0; left: 0; right: 0; top: 0;
+            background: linear-gradient(to top, rgba(9, 13, 22, 0.95) 20%, rgba(9, 13, 22, 0.4));
+            padding: 1.5rem; opacity: 0; display: flex; flex-direction: column; justify-content: flex-end; transition: all 0.4s ease;
+        }
+
+        .gallery-item:hover img { transform: scale(1.1); }
+        .gallery-item:hover .gallery-overlay { opacity: 1; }
+        .gallery-overlay h4 { color: var(--text-light); margin-bottom: 0.3rem; font-size: 1.2rem; }
+        .gallery-overlay p { color: var(--accent); font-size: 0.85rem; }
+
+        /* TABLA */
+        .table-container {
+            overflow-x: auto; border-radius: 16px; border: 1px solid var(--border); box-shadow: var(--shadow);
+            margin-top: 1.5rem;
+        }
+
+        table { width: 100%; border-collapse: collapse; text-align: left; background-color: rgba(15, 23, 42, 0.4); }
+        th, td { padding: 1.3rem; border-bottom: 1px solid var(--border); }
+        th { background-color: #0b1329; color: var(--text-light); font-size: 0.85rem; letter-spacing: 0.05em; text-transform: uppercase; }
+        tr:hover { background-color: rgba(30, 41, 59, 0.4); }
+
+        .highlight-box {
+            background: linear-gradient(90deg, rgba(37, 99, 235, 0.15) 0%, rgba(6, 182, 212, 0.05) 100%);
+            border-left: 5px solid var(--accent); padding: 2rem; margin-top: 2.5rem; border-radius: 14px;
+        }
+
+        .highlight-box h4 { color: var(--text-light); margin-bottom: 0.5rem; }
+
+        /* LISTAS DETALLADAS */
+        .detailed-list {
+            margin-top: 1.5rem;
+            list-style: none;
+        }
+        .detailed-list li {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+        .detailed-list li::before {
+            content: "\f00c";
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+        }
+
+        /* ENLACES EXTERNOS */
+        .explore-links { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; }
+        .external-link {
+            background: rgba(30, 41, 59, 0.4); border: 1px solid var(--border); padding: 1.5rem;
+            border-radius: 14px; color: #cbd5e1; text-decoration: none; display: flex;
+            align-items: center; justify-content: space-between; font-weight: 600; transition: all 0.3s ease;
+        }
+
+        .external-link:hover { background: var(--gradient); color: var(--text-dark); transform: scale(1.02); box-shadow: var(--neon-glow); }
+
+        /* BUZÓN DE SUGERENCIAS */
+        .mailbox-form { display: flex; flex-direction: column; gap: 1.5rem; }
+        .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+        .form-group label { color: var(--text-light); font-weight: 600; }
+        .form-control {
+            background-color: #0b1329; border: 1px solid #334155; padding: 1.2rem;
+            border-radius: 12px; color: var(--text-light); font-family: inherit; font-size: 1rem;
+        }
+        .form-control:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 15px rgba(6, 182, 212, 0.3); }
+        
+        .btn-submit {
+            background: var(--gradient); color: var(--text-dark); font-weight: 700; border: none;
+            padding: 1.2rem 2.5rem; border-radius: 12px; cursor: pointer; align-self: flex-start;
+            transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3);
+        }
+        .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(6, 182, 212, 0.5); }
+
+        .ideas-feedback { margin-top: 2.5rem; background: #0b1329; padding: 2rem; border-radius: 16px; border: 1px solid var(--border); display: none; }
+        .ideas-feedback h4 { color: var(--accent); margin-bottom: 1rem; }
+        .ideas-list li { background: rgba(15, 23, 42, 0.8); padding: 1.2rem; border-radius: 10px; margin-bottom: 1rem; border-left: 5px solid var(--accent); color: var(--text-light); list-style: none; }
+
+        /* FOOTER */
+        footer { background-color: #050811; color: #64748b; text-align: center; padding: 4rem 2rem; margin-top: 6rem; border-top: 1px solid var(--border); font-size: 0.95rem; }
+        footer a { color: var(--accent); text-decoration: none; font-weight: 600; }
+
+        /* RESPONSIVE */
+        @media (max-width: 992px) { .gallery-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 768px) {
+            header h1 { font-size: 2.5rem; }
+            section { padding: 2rem; }
+            .video-grid, .gallery-grid { grid-template-columns: 1fr; }
+            .btn-submit { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="splash-screen">
+        <div class="splash-content">
+            <div class="splash-logo"><i class="fa-solid fa-network-wired"></i></div>
+            <h1 class="splash-title">Salto de la IA: De la Generación a la Acción</h1>
+            <div class="ai-badge-splash"><i class="fa-solid fa-microchip"></i> Arquitectura Cognitiva Avanzada</div>
+            <div class="loader-bar"><div class="loader-progress"></div></div>
+        </div>
+    </div>
+
+    <div id="app-content">
+        <header>
+            <div class="ai-built-badge"><i class="fa-solid fa-terminal"></i> Core Engine Interface</div>
+            <h1>La Nueva Era de la Inteligencia Artificial</h1>
+            <p>Ecosistemas distribuidos, automatización robusta y procesamiento cognitivo estructurado.</p>
+            <div class="visitor-counter">
+                <i class="fa-solid fa-chart-line"></i> Visitas del sistema local: <span id="count">1</span>
+            </div>
+        </header>
+
+        <nav>
+            <button class="tab-btn active" onclick="openTab(event, 'tab-pilares')"><i class="fa-solid fa-layer-group"></i> Pilares</button>
+            <button class="tab-btn" onclick="openTab(event, 'tab-videos')"><i class="fa-solid fa-play"></i> Concepto Video</button>
+            <button class="tab-btn" onclick="openTab(event, 'tab-galeria')"><i class="fa-solid fa-images"></i> Galería Visual</button>
+            <button class="tab-btn" onclick="openTab(event, 'tab-sectores')"><i class="fa-solid fa-chart-pie"></i> Impacto Industrial</button>
+            <button class="tab-btn" onclick="openTab(event, 'tab-explorar')"><i class="fa-solid fa-globe"></i> Explorar Más</button>
+            <button class="tab-btn" onclick="openTab(event, 'tab-buzon')"><i class="fa-solid fa-lightbulb"></i> Buzón de Ideas</button>
+        </nav>
+
+        <main>
+            
+            <div id="tab-pilares" class="tab-content active">
+                <section>
+                    <h2><i class="fa-solid fa-cube"></i> Pilares de la Innovación Actual</h2>
+                    <div class="grid">
+                        <div class="card">
+                            <div class="card-img-wrapper"><img class="card-img" src="https://images.unsplash.com/photo-1614741118887-7a4ee193a5fa?auto=format&fit=crop&w=400&q=80" alt="Agentes"></div>
+                            <div class="card-content">
+                                <h4><i class="fa-solid fa-robot"></i> Agentes Autónomos</h4>
+                                <p>Sistemas independientes orientados a objetivos que planifican, validan y ejecutan secuencias complejas de código mediante bucles lógicos cerrados.</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-img-wrapper"><img class="card-img" src="https://images.unsplash.com/photo-1507668077129-56e32842fceb?auto=format&fit=crop&w=400&q=80" alt="Razonamiento"></div>
+                            <div class="card-content">
+                                <h4><i class="fa-solid fa-brain"></i> Razonamiento Lógico</h4>
+                                <p>Técnicas avanzadas de computación extendida que permiten a los modelos ejecutar árboles de decisión, verificación algorítmica y matemáticas analíticas abstractas.</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-img-wrapper"><img class="card-img" src="https://images.unsplash.com/photo-1542831371-29b0f74f9713?auto=format&fit=crop&w=400&q=80" alt="Acción"></div>
+                            <div class="card-content">
+                                <h4><i class="fa-solid fa-terminal"></i> Texto a Acción</h4>
+                                <p>Interfaces que transforman descripciones semánticas complejas y lenguaje abstracto en scripts estructurados, comandos directos de sistema y flujos de trabajo funcionales.</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-img-wrapper"><img class="card-img" src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=400&q=80" alt="Infraestructura masiva"></div>
+                            <div class="card-content">
+                                <h4><i class="fa-solid fa-server"></i> Infraestructura Masiva</h4>
+                                <p>Clústeres de supercomputación optimizados y hardware especializado de última generación que soportan billones de parámetros operando concurrentemente.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div id="tab-videos" class="tab-content">
+                <section>
+                    <h2><i class="fa-solid fa-video"></i> El Futuro Explicado en Video</h2>
+                    <div class="video-grid">
+                        <div class="video-card">
+                            <div class="video-container">
+                                <iframe src="https://www.youtube.com/watch?v=C7vqA9TTQ38&t=2s" title="Agentes IA" allowfullscreen></iframe>
+                            </div>
+                            <div class="video-info">
+                                <h4>¿Qué son los Agentes Automatizados?</h4>
+                                <p>Explicación analítica sobre cómo operan los modelos con bucles de retroalimentación autónomos en entornos virtuales dinámicos.</p>
+                                <a href="https://www.youtube.com/watch?v=C7vqA9TTQ38&t=2s" target="_blank" class="btn-video-link"><i class="fa-brands fa-youtube"></i> Ver en YouTube</a>
+                            </div>
+                        </div>
+                        <div class="video-card">
+                            <div class="video-container">
+                                <iframe src="https://www.youtube.com/embed/DIU48QL5Cyk" title="Robótica" allowfullscreen></iframe>
+                            </div>
+                            <div class="video-info">
+                                <h4>Modelos Fundacionales y Robótica</h4>
+                                <p>Análisis en profundidad sobre la encarnación física de la inteligencia computacional dentro de cadenas logísticas y manufactura avanzada.</p>
+                                <a href="https://www.youtube.com/watch?v=DIU48QL5Cyk" target="_blank" class="btn-video-link"><i class="fa-brands fa-youtube"></i> Ver en YouTube</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h3>Conceptos Adicionales de Análisis Teórico</h3>
+                    <ul class="detailed-list">
+                        <li><strong>Aprendizaje por Refuerzo con Feedback Humano (RLHF):</strong> Metodología de alineación de respuestas lógicas basada en preferencias del usuario.</li>
+                        <li><strong>Redes de Convolución Profunda (CNN):</strong> Procesamiento avanzado de patrones matriciales de datos visuales e imágenes.</li>
+                        <li><strong>Redes Neuronales de Transformadores (Transformers):</strong> Mecanismos de auto-atención encargados de evaluar la relevancia contextual en secuencias de información estructurada.</li>
+                    </ul>
+                </section>
+            </div>
+
+            <div id="tab-galeria" class="tab-content">
+                <section>
+                    <h2><i class="fa-solid fa-images"></i> Ecosistema Visual Avanzado</h2>
+                    <div class="gallery-grid">
+                        <div class="gallery-item">
+                            <img src="https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&w=500&q=85" alt="Redes">
+                            <div class="gallery-overlay"><h4>Arquitecturas Densas</h4><p>Análisis de nodos y capas computacionales.</p></div>
+                        </div>
+                        <div class="gallery-item">
+                            <img src="https://images.unsplash.com/photo-1501854140801-50d01698950b?auto=format&fit=crop&w=500&q=85" alt="Sostenible">
+                            <div class="gallery-overlay"><h4>Sustentabilidad de Datos</h4><p>Eficiencia en el almacenamiento distribuido.</p></div>
+                        </div>
+                        <div class="gallery-item">
+                            <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=500&q=85" alt="Ingeniería">
+                            <div class="gallery-overlay"><h4>Modelado Físico</h4><p>Integración de hardware y sensores lógicos.</p></div>
+                        </div>
+                        <div class="gallery-item">
+                            <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=500&q=85" alt="Hardware">
+                            <div class="gallery-overlay"><h4>Sistemas Embebidos</h4><p>Microcontroladores y procesamiento perimetral.</p></div>
+                        </div>
+                        <div class="gallery-item">
+                            <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=500&q=85" alt="Datos en la nube">
+                            <div class="gallery-overlay"><h4>Flujos Globales</h4><p>Transmisión e ingesta síncrona de macrodatos.</p></div>
+                        </div>
+                        <div class="gallery-item">
+                            <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=500&q=85" alt="Ciberseguridad">
+                            <div class="gallery-overlay"><h4>Criptografía</h4><p>Protección y encriptación de datos sensibles.</p></div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div id="tab-sectores" class="tab-content">
+                <section>
+                    <h2><i class="fa-solid fa-industry"></i> Impacto en Sectores Clave</h2>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Sector</th>
+                                    <th>Casos de Uso Primarios</th>
+                                    <th>Métrica de Rendimiento Esperada</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Salud Avanzada</strong></td>
+                                    <td>Descubrimiento de fármacos por plegamiento proteico y optimización predictiva de flujos clínicos.</td>
+                                    <td>Reducción del 40% en tiempo de simulación química.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Infraestructura y Redes</strong></td>
+                                    <td>Monitoreo predictivo en tiempo real, balanceo automático de redes eléctricas y optimización algorítmica de la cadena de suministro.</td>
+                                    <td>Incremento del 25% en la eficiencia operativa de distribución.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Finanzas y Riesgos</strong></td>
+                                    <td>Evaluaciones predictivas de riesgo corporativo mediante modelos estadísticos masivos y análisis antifraude en tiempo real.</td>
+                                    <td>Detección de anomalías con precisión del 99.4%.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Educación y Adaptabilidad</strong></td>
+                                    <td>Diseño de rutas de aprendizaje dinámicas basadas en perfiles lógicos individuales y evaluación de competencias técnicas.</td>
+                                    <td>Optimización en curvas de retención cognitiva del estudiante.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Manufactura Autónoma</strong></td>
+                                    <td>Control robótico mediante visión computacional, calibración neumática automatizada y mantenimiento prescriptivo de maquinaria.</td>
+                                    <td>Mitigación del 30% en fallas críticas de hardware.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="highlight-box">
+                        <h4>📈 Ventaja Competitiva Estructural</h4>
+                        <p>La adopción sistémica de arquitecturas lógicas de procesamiento avanzado incrementa exponencialmente la velocidad de cálculo operativo, reduciendo cuellos de botella en la toma de decisiones empresariales basadas en Big Data.</p>
+                    </div>
+                </section>
+            </div>
+
+            <div id="tab-explorar" class="tab-content">
+                <section>
+                    <h2><i class="fa-solid fa-compass"></i> Portales y Repositorios Especializados</h2>
+                    <p style="margin-bottom: 2rem;">Accede de forma directa a los portales globales líderes dedicados a la investigación científica de vanguardia, publicación de papers y documentación técnica en ciencias de la computación.</p>
+                    <div class="explore-links">
+                        <a href="https://www.technologyreview.es" target="_blank" class="external-link"><span>MIT Technology Review</span> <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                        <a href="https://hai.stanford.edu" target="_blank" class="external-link"><span>Stanford HAI (Human-Centered)</span> <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                        <a href="https://openai.com/research" target="_blank" class="external-link"><span>OpenAI Research Center</span> <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                        <a href="https://arxiv.org" target="_blank" class="external-link"><span>arXiv Computer Science Papers</span> <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                        <a href="https://github.com/trending" target="_blank" class="external-link"><span>GitHub Trending Repositories</span> <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                        <a href="https://www.nature.com" target="_blank" class="external-link"><span>Nature Intelligence</span> <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                    </div>
+                </section>
+            </div>
+
+            <div id="tab-buzon" class="tab-content">
+                <section>
+                    <h2><i class="fa-solid fa-lightbulb"></i> Registro Local de Propuestas Tecnológicas</h2>
+                    <p style="margin-bottom: 1.5rem;">Utiliza este módulo integrado de captura de datos para registrar ideas sobre desarrollo, arquitectura de software o innovaciones algorítmicas directamente en el almacenamiento persistente local de tu navegador (localStorage).</p>
+                    <form id="ideaForm" class="mailbox-form">
+                        <div class="form-group">
+                            <label for="userName">Remitente / Entidad Técnica</label>
+                            <input type="text" id="userName" class="form-control" placeholder="Ej. Ingeniero o Área Técnica">
+                        </div>
+                        <div class="form-group">
+                            <label for="userIdea">Propuesta Tecnológica Estructurada</label>
+                            <textarea id="userIdea" class="form-control" rows="5" placeholder="Escribe los detalles lógicos, arquitectónicos o matemáticos de la propuesta..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn-submit">Procesar e Insertar Propuesta</button>
+                    </form>
+                    <div id="feedbackContainer" class="ideas-feedback">
+                        <h4>🎉 Propuestas Registradas en el Sistema Local</h4>
+                        <ul id="ideasList" class="ideas-list"></ul>
+                    </div>
+                </section>
+            </div>
+
+        </main>
+
+        <footer>
+            <p>Ecosistema Informativo de Tecnologías Complejas • 2026</p>
+            <p>Fuentes y Documentación de Referencia: <a href="https://www.unesco.org/es/artificial-intelligence" target="_blank">UNESCO</a> | <a href="https://www.aecoc.es" target="_blank">AECOC</a></p>
+        </footer>
+    </div>
+
+    <script>
+        // LÓGICA DE NAVEGACIÓN POR PESTAÑAS
+        function openTab(evt, tabId) {
+            const tabContents = document.getElementsByClassName("tab-content");
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove("active");
+            }
+
+            const tabBtns = document.getElementsByClassName("tab-btn");
+            for (let i = 0; i < tabBtns.length; i++) {
+                tabBtns[i].classList.remove("active");
+            }
+
+            document.getElementById(tabId).classList.add("active");
+            evt.currentTarget.classList.add("active");
+            
+            window.scrollTo({ top: document.querySelector('nav').offsetTop - 20, behavior: 'smooth' });
+        }
+
+        // CONTROL DE SPLASH SCREEN Y CONTADOR LOCAL
+        document.addEventListener("DOMContentLoaded", () => {
+            const splash = document.getElementById("splash-screen");
+            const mainContent = document.getElementById("app-content");
+
+            setTimeout(() => {
+                splash.style.opacity = "0";
+                splash.style.visibility = "hidden";
+                mainContent.style.opacity = "1";
+            }, 2200);
+
+            // Manejo del contador local persistente
+            let visits = localStorage.getItem("visitsCounter") || 0;
+            visits = parseInt(visits) + 1;
+            localStorage.setItem("visitsCounter", visits);
+            document.getElementById("count").innerText = visits;
+
+            renderIdeas();
+        });
+
+        // REGISTRO Y RENDERIZADO DE PROPUESTAS
+        const ideaForm = document.getElementById("ideaForm");
+        const feedbackContainer = document.getElementById("feedbackContainer");
+        const ideasList = document.getElementById("ideasList");
+
+        ideaForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const name = document.getElementById("userName").value.trim() || "Anónimo";
+            const idea = document.getElementById("userIdea").value.trim();
+
+            if(!idea) return;
+
+            let savedIdeas = JSON.parse(localStorage.getItem("userIdeas")) || [];
+            savedIdeas.push({ name, idea });
+            localStorage.setItem("userIdeas", JSON.stringify(savedIdeas));
+
+            ideaForm.reset();
+            renderIdeas();
+        });
+
+        function renderIdeas() {
+            let savedIdeas = JSON.parse(localStorage.getItem("userIdeas")) || [];
+            if(savedIdeas.length > 0) {
+                feedbackContainer.style.display = "block";
+                ideasList.innerHTML = "";
+                // Muestra las últimas 5 propuestas registradas en orden inverso
+                savedIdeas.slice(-5).reverse().forEach(item => {
+                    const li = document.createElement("li");
+                    li.innerHTML = `<strong>${item.name}:</strong> ${item.idea}`;
+                    ideasList.appendChild(li);
+                });
+            }
+        }
+    </script>
+</body>
+</html>
